@@ -1,0 +1,32 @@
+{
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "inferenceAccelerators": [],
+    "containerDefinitions": [
+        {
+            "name": "(Task 이름)",
+            "image": "(계정 ID).dkr.ecr.ap-northeast-2.amazonaws.com/(저장소 이름)",
+            "portMappings": [
+                {
+                    "containerPort": 8089,
+                    "protocol": "tcp"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/(Task 이름)",
+                    "awslogs-region": "ap-northeast-2",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        }
+    ],
+    "networkMode": "awsvpc",
+    "memory": "2048",
+    "cpu": "1024",
+    "executionRoleArn": "<create_new>",
+    "family": "(Task 이름)",
+    "taskRoleArn": ""
+}
