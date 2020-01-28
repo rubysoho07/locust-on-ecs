@@ -1,0 +1,13 @@
+{
+  "containerOverrides": [
+    {
+      "name": "locust-test",
+      "environment": [
+        {
+          "name": "TARGET_URL",
+          "value": "(테스트 할 URL)"
+        }
+      ]
+    }
+  ]
+}
