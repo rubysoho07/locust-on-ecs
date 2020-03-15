@@ -1,0 +1,42 @@
+{
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "inferenceAccelerators": [],
+    "containerDefinitions": [
+        {
+            "name": "(Task 이름)",
+            "image": "(계정 ID).dkr.ecr.ap-northeast-2.amazonaws.com/(저장소 이름)",
+            "portMappings": [
+                {
+                    "containerPort": 8089,
+                    "protocol": "tcp"
+                },
+                {
+                    "containerPort": 5557,
+                    "protocol": "tcp"
+                },
+                {
+                    "containerPort": 5558,
+                    "protocol": "tcp"
+                }
+            ],
+            "environment": [
+                {
+                    "name": "TARGET_URL",
+                    "value": "(테스트할 URL)"
+                },
+                {
+                    "name": "LOCUST_MODE",
+                    "value": "master"
+                }
+            ]
+        }
+    ],
+    "networkMode": "awsvpc",
+    "memory": "2048",
+    "cpu": "1024",
+    "executionRoleArn": "arn:aws:iam::(계정 ID):role/ecsTaskExecutionRole",
+    "family": "(작업 등록을 위한 패밀리)",
+    "taskRoleArn": ""
+}

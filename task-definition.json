@@ -19,6 +19,6 @@
     "memory": "2048",
     "cpu": "1024",
     "executionRoleArn": "(앞에서 만든 IAM Role)",
-    "family": "(Task 이름)",
+    "family": "(작업 등록을 위한 패밀리)",
     "taskRoleArn": ""
 }

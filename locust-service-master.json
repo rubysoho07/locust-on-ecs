@@ -1,0 +1,20 @@
+{
+    "cluster": "(클러스터 이름)",
+    "serviceName": "(서비스 이름)",
+    "taskDefinition": "(Task 이름:버전)",
+    "serviceRegistries": [
+       {
+          "registryArn": "arn:aws:servicediscovery:ap-northeast-2:(계정 ID):service/(Service Discovery에 등록한 서비스 ID)"
+       }
+    ],
+    "launchType": "FARGATE",
+    "platformVersion": "LATEST",
+    "networkConfiguration": {
+       "awsvpcConfiguration": {
+          "assignPublicIp": "ENABLED",
+          "securityGroups": [ "(보안 그룹 ID)" ],
+          "subnets": [ "(서브넷 ID)", "(다른 서브넷 ID)" ]
+       }
+    },
+    "desiredCount": 1
+}
