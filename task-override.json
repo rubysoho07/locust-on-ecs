@@ -1,7 +1,7 @@
 {
   "containerOverrides": [
     {
-      "name": "locust-test",
+      "name": "(Task 이름)",
       "environment": [
         {
           "name": "TARGET_URL",
