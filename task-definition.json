@@ -12,15 +12,7 @@
                     "containerPort": 8089,
                     "protocol": "tcp"
                 }
-            ],
-            "logConfiguration": {
-                "logDriver": "awslogs",
-                "options": {
-                    "awslogs-group": "/ecs/(Task 이름)",
-                    "awslogs-region": "ap-northeast-2",
-                    "awslogs-stream-prefix": "ecs"
-                }
-            }
+            ]
         }
     ],
     "networkMode": "awsvpc",
