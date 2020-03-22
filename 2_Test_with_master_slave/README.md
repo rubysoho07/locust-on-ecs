@@ -189,8 +189,8 @@ aws ecs delete-service --cluster (클러스터 이름) --service (서비스 이�
 aws ecs list-tasks --cluster (클러스터 이름) --family locust-master
 {
     "taskArns": [
-        "arn:aws:ecs:ap-northeast-2:(계정 ID):task/(클러스터 이름)/(Task ID 1)",
-        "arn:aws:ecs:ap-northeast-2:(계정 ID):task/(클러스터 이름)/(Task ID 2)"
+        "arn:aws:ecs:ap-northeast-2:(계정 ID):task/(Task ID 1)",
+        "arn:aws:ecs:ap-northeast-2:(계정 ID):task/(Task ID 2)"
     ]
 }
 aws ecs stop-task --cluster (클러스터 이름) --family (Task ID 1)

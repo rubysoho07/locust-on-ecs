@@ -115,7 +115,7 @@ aws ecs run-task --launch-type FARGATE --cluster (클러스터 이름) --count 1
             "containers": [
                 {
                     "containerArn": "arn:aws:ecs:ap-northeast-2:(계정 ID):container/....",
-                    "taskArn": "arn:aws:ecs:ap-northeast-2:(계정 ID):task/(클러스터 ID)/(Task ID)",
+                    "taskArn": "arn:aws:ecs:ap-northeast-2:(계정 ID):task/(Task ID)",
             ... 이하 생략
 ```
 
