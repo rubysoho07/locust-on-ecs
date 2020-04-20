@@ -78,7 +78,7 @@ docker push (계정 ID).dkr.ecr.ap-northeast-2.amazonaws.com/(저장소 이름):
 다음 명령으로 Docker Image를 실행합니다. 
 
 ```shell script
-docker run -p 8089:8089 -e TARGET_URL=(테스트 하려고 하는 URL) (Docker 이미지 이름)
+docker run -p 8089:8089 (Docker 이미지 태그)
 ```
 
 Linux/macOS의 경우 `localhost:8089`로, Windows의 경우 `가상 머신의 IP:8089`로 접속하여 Locust를 실행합니다. 
