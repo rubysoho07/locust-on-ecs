@@ -7,6 +7,10 @@ class MyTaskSet(TaskSet):
     def get_index_page(self):
         self.client.get('/')
 
+    @task
+    def get_test_page(self):
+        self.client.get('/test.html')
+
 
 class MyLocust(HttpLocust):
     task_set = MyTaskSet

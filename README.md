@@ -15,7 +15,7 @@ pip install locustio
 
 ## Locust 스크립트 만들기
 
-샘플 스크립트는 동일 폴더 내 `locust-example.py` 파일을 참고해 주세요.
+샘플 스크립트는 `0_Sample_Docker_Image/locust-example.py` 파일을 참고해 주세요.
 
 Locust를 로컬에서 실행할 때는 다음과 같이 입력합니다. 
 
@@ -27,7 +27,7 @@ locust -f (파일 이름) -H (호스트 이름)
 
 ## Docker 이미지 만들기
 
-다음과 같이 Dockerfile을 만듭니다. (첨부한 Dockerfile을 참고하세요)
+다음과 같이 Dockerfile을 만듭니다. (`0_Sample_Docker_Image/Dockerfile` 파일을 참고하세요)
 
 ```dockerfile
 FROM locustio/locust
