@@ -20,11 +20,16 @@
             "name": "(Task 이름)",
             "image": "(계정 ID).dkr.ecr.ap-northeast-2.amazonaws.com/(저장소 이름)",
             "portMappings": [
-                {
-                    "containerPort": 8089,
-                    "protocol": "tcp"
+                { "containerPort": 8089, "protocol": "tcp" }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/(Task 이름)",
+                    "awslogs-region": "ap-northeast-2",
+                    "awslogs-stream-prefix": "ecs"
                 }
-            ]
+            }
         }
     ],
     "networkMode": "awsvpc",
@@ -40,7 +45,7 @@
 
 * `requiresCompatibilities`: Fargate를 이용하기 위해 `FARGATE`로 설정합니다.
 * `portMappings`: 컨테이너와 호스트 포트 간 매핑입니다. 8089번 포트를 이용하면 Locust의 웹 콘솔로 이동할 수 있기 때문에 8089 포트에 대해 설정했습니다. 
-* `logConfiguration`: 기본적으로 CloudWatch Logs에 로그를 남깁니다. Stdout 및 stderr로 출력한 내용이 CloudWatch Logs에 담기게 됩니다. 
+* `logConfiguration`: CloudWatch Logs에 로그를 남깁니다. Stdout 및 stderr로 출력한 내용이 CloudWatch Logs에 담기게 됩니다. (로그 그룹은 미리 생성해야 합니다.)
 * `memory`, `cpu`: 컨테이너에서 사용할 메모리와 CPU의 조합입니다. 어떻게 설정해야 하는지 궁금하다면, [이 문서](https://docs.aws.amazon.com/ko_kr/AmazonECS/latest/developerguide/create-task-definition.html)를 참고하세요.
 
 그리고 CLI에서 다음과 같이 Task 정의를 만듭니다. 

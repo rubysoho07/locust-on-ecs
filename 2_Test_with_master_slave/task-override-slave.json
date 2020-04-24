@@ -4,16 +4,12 @@
       "name": "(Task 이름)",
       "environment": [
         {
-          "name": "TARGET_URL",
-          "value": "(테스트 할 URL)"
-        },
-        {
           "name": "LOCUST_MODE",
           "value": "slave"
         },
         {
           "name": "LOCUST_MASTER_HOST",
-          "value": "(Master 서비스 이름).(Namespace 이름)"
+          "value": "master의 Private IP 주소"
         }
       ]
     }

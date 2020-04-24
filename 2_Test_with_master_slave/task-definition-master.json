@@ -23,10 +23,6 @@
             ],
             "environment": [
                 {
-                    "name": "TARGET_URL",
-                    "value": "(테스트할 URL)"
-                },
-                {
                     "name": "LOCUST_MODE",
                     "value": "master"
                 }
