@@ -33,6 +33,8 @@ locust -f (파일 이름) -H (호스트 이름)
 FROM locustio/locust
 
 ADD '스크립트 파일 이름' locustfile.py
+
+ENV TARGET_URL (테스트 할 URL)
 ```
 
 Locust Docker 이미지는 기본적으로 `/locustfile.py` 파일을 찾아서 실행합니다.
@@ -69,9 +71,21 @@ docker tag (저장소 이름):latest (계정 ID).dkr.ecr.ap-northeast-2.amazonaw
 docker push (계정 ID).dkr.ecr.ap-northeast-2.amazonaws.com/(저장소 이름):latest
 ```
 
+최신 버전의 AWS CLI를 이용하는 경우, ECR에 로그인하는 명령이 변경되었습니다. 
+
+```shell script
+aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin aws_account_id.dkr.ecr.ap-northeast-2.amazonaws.com
+```
+
 ##### Windows에서 이미지 올리기 (Powershell 기준)
 
 다른 명령은 모두 동일하나, 두번째 줄의 내용은 `Invoke-Expression -Command (aws ecr get-login --no-include-email)`으로 바꾸어 실행합니다.
+
+최신 버전의 AWS CLI를 이용하는 경우, [PowerShell용 AWS 도구](https://aws.amazon.com/ko/powershell/)를 설치한 뒤, 다음 명령을 입력합니다.
+
+```shell script
+(Get-ECRLoginCommand).Password | docker login --username AWS --password-stdin aws_account_id.dkr.ecr.ap-northeast-2.amazonaws.com
+```
 
 ### 로컬에서 이미지 실행해 보기
 
@@ -138,11 +152,16 @@ aws ecs create-cluster --cluster-name (클러스터 이름)
             "name": "(Task 이름)",
             "image": "(계정 ID).dkr.ecr.ap-northeast-2.amazonaws.com/(저장소 이름)",
             "portMappings": [
-                {
-                    "containerPort": 8089,
-                    "protocol": "tcp"
+                { "containerPort": 8089, "protocol": "tcp" }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/(Task 이름)",
+                    "awslogs-region": "ap-northeast-2",
+                    "awslogs-stream-prefix": "ecs"
                 }
-            ]
+            }
         }
     ],
     "networkMode": "awsvpc",
@@ -158,7 +177,7 @@ aws ecs create-cluster --cluster-name (클러스터 이름)
 
 * `requiresCompatibilities`: Fargate를 이용하기 위해 `FARGATE`로 설정합니다.
 * `portMappings`: 컨테이너와 호스트 포트 간 매핑입니다. 8089번 포트를 이용하면 Locust의 웹 콘솔로 이동할 수 있기 때문에 8089 포트에 대해 설정했습니다. 
-* `logConfiguration`: 기본적으로 CloudWatch Logs에 로그를 남깁니다. Stdout 및 stderr로 출력한 내용이 CloudWatch Logs에 담기게 됩니다. 
+* `logConfiguration`: CloudWatch Logs에 로그를 남깁니다. Stdout 및 stderr로 출력한 내용이 CloudWatch Logs에 담기게 됩니다. (로그 그룹은 미리 생성해야 합니다.)
 * `memory`, `cpu`: 컨테이너에서 사용할 메모리와 CPU의 조합입니다. 어떻게 설정해야 하는지 궁금하다면, [이 문서](https://docs.aws.amazon.com/ko_kr/AmazonECS/latest/developerguide/create-task-definition.html)를 참고하세요.
 
 그리고 CLI에서 다음과 같이 Task 정의를 만듭니다. 
