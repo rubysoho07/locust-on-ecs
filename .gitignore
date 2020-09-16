@@ -6,3 +6,8 @@
 
 # PyCache
 __pycache__/
+
+# Terraform
+*.terraform/
+*.tfstate
+*.tfstate.backup

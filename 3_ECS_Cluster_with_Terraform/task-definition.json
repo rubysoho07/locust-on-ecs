@@ -1,0 +1,23 @@
+[
+    {
+        "name": "LOCUST",
+        "image": "(이미지 경로)",
+        "portMappings": [
+            {
+                "containerPort": 8089,
+                "protocol": "tcp"
+            }
+        ],
+        "environment": [
+            { "name": "LOCUST_MODE", "value": "master" }
+        ],
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+                "awslogs-group": "/ecs/LOCUST",
+                "awslogs-region": "ap-northeast-2",
+                "awslogs-stream-prefix": "ecs"
+            }
+        }
+    }
+]
