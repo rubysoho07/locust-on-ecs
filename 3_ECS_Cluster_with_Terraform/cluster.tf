@@ -89,3 +89,7 @@ resource "aws_ecs_service" "locust_fargate_master" {
     assign_public_ip = true
   }
 }
+
+output "security_group_id" {
+  value = aws_security_group.locust_fargate_sg.id
+}
