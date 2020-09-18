@@ -210,6 +210,10 @@ aws ecs register-task-definition --cli-input-json file://./task-definition.json
 
 [문서 참조](2_Test_with_master_slave/README.md)
 
+### Terraform으로 시스템 구성하기
+
+[문서 참조](3_ECS_Cluster_with_Terraform/README.md)
+
 ## 참고한 자료들
 
 * [Amazon ECR에서 AWS CLI 사용](https://docs.aws.amazon.com/ko_kr/AmazonECR/latest/userguide/ECR_AWSCLI.html)
