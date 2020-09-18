@@ -25,7 +25,7 @@ def stop_slave_tasks():
 
 
 def _get_master_private_ip(attachments: dict):
-
+    """ Get private IP address of master service. """
     for detail in attachments['details']:
         if detail['name'] == 'privateIPv4Address':
             return detail['value']
@@ -75,11 +75,40 @@ def start_slave_tasks(count: int):
         print('taskArn:', task['taskArn'])
 
 
+def _get_eni_id(attachment_details: dict):
+    for detail in attachment_details:
+        if detail['name'] == 'networkInterfaceId':
+            return detail['value']
+
+
+def get_master_public_ip():
+    """ Get public IP address of master service. """
+    print('Public IP Address of Master Service -------')
+    ecs = boto3.client('ecs')
+
+    tasks_list = ecs.list_tasks(
+        cluster='Fargate_Load_Test_Cluster',
+        family='LOCUST'
+    )
+
+    tasks = ecs.describe_tasks(
+        cluster='Fargate_Load_Test_Cluster',
+        tasks=tasks_list['taskArns']
+    )
+
+    for task in tasks['tasks']:
+        if 'startedBy' in task.keys():
+            ec2 = boto3.resource('ec2')
+            network_interface = ec2.NetworkInterface(_get_eni_id(task['attachments'][0]['details']))
+            print(network_interface.association_attribute.PublicIp)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--start', type=int, help='Start slave tasks with the count to run')
     parser.add_argument('--exit', action='store_true', help='End slave tasks')
+    parser.add_argument('--get-master-address', action='store_true', help='Get public ip address of master service')
 
     args = parser.parse_args()
 
@@ -87,5 +116,7 @@ if __name__ == '__main__':
         start_slave_tasks(args.start)
     elif args.exit is True:
         stop_slave_tasks()
+    elif args.get_master_address is True:
+        get_master_public_ip()
     else:
         parser.print_help()
