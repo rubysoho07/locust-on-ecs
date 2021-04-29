@@ -1,14 +1,14 @@
-# 여러 대의 컨테이너를 Master - Slave 관계로 테스트 하기
+# 여러 대의 컨테이너를 Master - Worker 관계로 테스트 하기
 
-Master-Slave 관계를 이용해서 부하 테스트를 하려면, Master-Slave 컨테이너 간 통신이 가능해야 합니다. 
-이를 위해서 master는 서비스로 올려야 하고, slave는 서비스로 올라온 master의 private IP를 바탕으로 task를 생성해 줍니다. 
+Master-Worker 관계를 이용해서 부하 테스트를 하려면, Master-Worker 컨테이너 간 통신이 가능해야 합니다. 
+이를 위해서 master는 서비스로 올려야 하고, worker는 서비스로 올라온 master의 private IP를 바탕으로 task를 생성해 줍니다. 
 
 ## 보안 그룹 만들기
 
 다음과 같은 명령을 실행합니다. 각 포트의 의미는 다음과 같습니다.
 
 * 8089: 웹으로 통신하기 위한 포트
-* 5557, 5558: Master - Slave 컨테이너 간 통신을 위한 포트
+* 5557, 5558: Master - Worker 컨테이너 간 통신을 위한 포트
 
 IP 대역과 서브넷 마스크는 서비스가 올라간 VPC의 CIDR을 확인하여 지정합니다.
 
@@ -104,14 +104,14 @@ aws ecs describe-tasks --cluster (클러스터 이름) --tasks (Task ID-taskArn�
 }
 ```
 
-## Slave 컨테이너 실행하기
+## Worker 컨테이너 실행하기
 
-Master와 Slave 컨테이너 모두 동일한 스크립트를 가지고 있어야 하므로, 앞에서 만든 master의 작업 정의를 활용해서 작업을 생성해 보겠습니다. Slave 역할을 하는 컨테이너는 다음과 같은 차이가 있습니다. 
+Master와 Worker 컨테이너 모두 동일한 스크립트를 가지고 있어야 하므로, 앞에서 만든 master의 작업 정의를 활용해서 작업을 생성해 보겠습니다. Worker 역할을 하는 컨테이너는 다음과 같은 차이가 있습니다. 
 
-* `LOCUST_MODE` 환경 변수: `slave`로 설정
+* `LOCUST_MODE` 환경 변수: `worker`로 설정
 * `LOCUST_MASTER_HOST` 환경 변수: 앞에서 얻어온 Master 서비스의 Private IP
 
-`task-override-slave.json` 파일을 확인해 보시면, 어떤 부분이 달라졌는지 확인하실 수 있습니다.
+`task-override-worker.json` 파일을 확인해 보시면, 어떤 부분이 달라졌는지 확인하실 수 있습니다.
 ```
 {
   "containerOverrides": [
@@ -120,7 +120,7 @@ Master와 Slave 컨테이너 모두 동일한 스크립트를 가지고 있어�
       "environment": [
         {
           "name": "LOCUST_MODE",
-          "value": "slave"
+          "value": "worker"
         },
         {
           "name": "LOCUST_MASTER_HOST",
@@ -136,10 +136,10 @@ Master와 Slave 컨테이너 모두 동일한 스크립트를 가지고 있어�
 ```shell script
 aws ecs run-task --launch-type FARGATE --cluster (클러스터 이름) --count 2 \
 --network-configuration 'awsvpcConfiguration={subnets=["서브넷 ID","다른 서브넷 ID"],securityGroups=["앞에서 만든 보안 그룹 ID"],assignPublicIp="ENABLED"}' \
---overrides file://./task-override-slave.json --task-definition (Task 이름:버전)
+--overrides file://./task-override-worker.json --task-definition (Task 이름:버전)
 ```
 
-조금 기다렸다가 `Master의 Public IP:8089` 주소로 접속해 보면, Slave 개수가 2인 것을 확인할 수 있습니다. 
+조금 기다렸다가 `Master의 Public IP:8089` 주소로 접속해 보면, Worker 개수가 2인 것을 확인할 수 있습니다. 
 
 이제 테스트를 진행해 볼 수 있습니다. 
 
@@ -151,7 +151,7 @@ aws ecs update-service --cluster (클러스터 이름) --service (서비스 이�
 aws ecs delete-service --cluster (클러스터 이름) --service (서비스 이름)
 ```
 
-그리고 slave 작업들을 모두 종료합니다.
+그리고 worker 작업들을 모두 종료합니다.
 ```shell script
 aws ecs list-tasks --cluster (클러스터 이름) --family locust-master
 {

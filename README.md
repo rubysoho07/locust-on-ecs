@@ -206,9 +206,9 @@ aws ecs register-task-definition --cli-input-json file://./task-definition.json
 
 [문서 참조](1_Test_with_single_container/README.md)
 
-### 여러 대의 컨테이너를 Master - Slave 관계로 테스트 하기
+### 여러 대의 컨테이너를 Master - Worker 관계로 테스트 하기
 
-[문서 참조](2_Test_with_master_slave/README.md)
+[문서 참조](2_Test_with_master_workers/README.md)
 
 ### Terraform으로 시스템 구성하기
 

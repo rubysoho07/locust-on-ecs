@@ -3,8 +3,8 @@ import argparse
 import boto3
 
 
-def stop_slave_tasks():
-    """ Stop Slave ECS Tasks """
+def stop_worker_tasks():
+    """ Stop Worker ECS Tasks """
     print('Stop Tasks')
     ecs = boto3.client('ecs')
 
@@ -31,9 +31,9 @@ def _get_master_private_ip(attachments: dict):
             return detail['value']
 
 
-def start_slave_tasks(count: int):
-    """ Start Slave ECS Tasks """
-    print(f'Start Slave Tasks: {count}')
+def start_worker_tasks(count: int):
+    """ Start Worker ECS Tasks """
+    print(f'Start Worker Tasks: {count}')
     ecs = boto3.client('ecs')
 
     task = ecs.list_tasks(
@@ -60,7 +60,7 @@ def start_slave_tasks(count: int):
             'containerOverrides': [{
                 'name': 'LOCUST',
                 'environment': [
-                    {'name': 'LOCUST_MODE', 'value': 'slave'},
+                    {'name': 'LOCUST_MODE', 'value': 'worker'},
                     {'name': 'LOCUST_MASTER_HOST', 'value': master_ip}
                 ]
             }]
@@ -69,7 +69,7 @@ def start_slave_tasks(count: int):
         count=count
     )
 
-    print('Creating slave tasks finished')
+    print('Creating worker tasks finished')
     print('----------------------------')
     for task in response['tasks']:
         print('taskArn:', task['taskArn'])
@@ -106,16 +106,16 @@ def get_master_public_ip():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--start', type=int, help='Start slave tasks with the count to run')
-    parser.add_argument('--exit', action='store_true', help='End slave tasks')
+    parser.add_argument('--start', type=int, help='Start worker tasks with the count to run')
+    parser.add_argument('--exit', action='store_true', help='End worker tasks')
     parser.add_argument('--get-master-address', action='store_true', help='Get public ip address of master service')
 
     args = parser.parse_args()
 
     if args.start is not None:
-        start_slave_tasks(args.start)
+        start_worker_tasks(args.start)
     elif args.exit is True:
-        stop_slave_tasks()
+        stop_worker_tasks()
     elif args.get_master_address is True:
         get_master_public_ip()
     else:
