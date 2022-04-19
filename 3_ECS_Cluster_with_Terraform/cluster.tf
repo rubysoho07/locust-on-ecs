@@ -3,6 +3,7 @@ provider "aws" {}
 resource "aws_security_group" "locust_fargate_sg" {
   name = "Locust_Fargate_SG"
   description = "Security Group for Locust Fargate Task"
+  vpc_id = var.vpc_id
 
   ingress {
     from_port = 8089
@@ -15,14 +16,14 @@ resource "aws_security_group" "locust_fargate_sg" {
     from_port = 5557
     protocol = "tcp"
     to_port = 5557
-    cidr_blocks = ["(서브넷 CIDR)", "(서브넷 CIDR)", "(서브넷 CIDR)"]
+    cidr_blocks = [var.subnet_cidr_1, var.subnet_cidr_2]
   }
 
   ingress {
     from_port = 5558
     protocol = "tcp"
     to_port = 5558
-    cidr_blocks = ["(서브넷 CIDR)", "(서브넷 CIDR)", "(서브넷 CIDR)"]
+    cidr_blocks = [var.subnet_cidr_1, var.subnet_cidr_2]
   }
 
   egress {
@@ -84,7 +85,7 @@ resource "aws_ecs_service" "locust_fargate_master" {
   launch_type = "FARGATE"
 
   network_configuration {
-    subnets = ["(서브넷 ID)", "(서브넷 ID)", "(서브넷 ID)"]
+    subnets = [var.subnet_id_1, var.subnet_id_2]
     security_groups = [aws_security_group.locust_fargate_sg.id]
     assign_public_ip = true
   }

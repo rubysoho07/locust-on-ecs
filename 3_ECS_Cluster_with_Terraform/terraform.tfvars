@@ -1,0 +1,5 @@
+subnet_cidr_1 = "your subnet cidr 1"
+subnet_cidr_2 = "your subnet cidr 2"
+subnet_id_1 = "your subnet id 1"
+subnet_id_2 = "your subnet id 2"
+vpc_id = "your vpc id"
