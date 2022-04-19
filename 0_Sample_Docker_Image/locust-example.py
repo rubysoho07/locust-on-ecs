@@ -1,7 +1,7 @@
-from locust import HttpUser, TaskSet, task, between
+from locust import HttpUser, task, between
 
-
-class MyTaskSet(TaskSet):
+class MyTaskSet(HttpUser):
+    wait_time = between(5, 15)
 
     @task
     def get_index_page(self):
@@ -10,8 +10,3 @@ class MyTaskSet(TaskSet):
     @task
     def get_test_page(self):
         self.client.get('/test.html')
-
-
-class MyLocust(HttpUser):
-    task_set = MyTaskSet
-    wait_time = between(5, 15)

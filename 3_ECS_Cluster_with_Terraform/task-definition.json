@@ -9,7 +9,7 @@
             }
         ],
         "environment": [
-            { "name": "LOCUST_MODE", "value": "master" }
+            { "name": "LOCUST_MODE_MASTER", "value": "true" }
         ],
         "logConfiguration": {
             "logDriver": "awslogs",
@@ -18,6 +18,13 @@
                 "awslogs-region": "ap-northeast-2",
                 "awslogs-stream-prefix": "ecs"
             }
-        }
+        },
+        "ulimits": [
+            {
+                "name": "nofile",
+                "softlimit": 10000,
+                "hardlimit": 10000
+            }
+        ]
     }
 ]

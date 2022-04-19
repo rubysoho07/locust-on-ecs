@@ -60,8 +60,9 @@ def start_worker_tasks(count: int):
             'containerOverrides': [{
                 'name': 'LOCUST',
                 'environment': [
-                    {'name': 'LOCUST_MODE', 'value': 'worker'},
-                    {'name': 'LOCUST_MASTER_HOST', 'value': master_ip}
+                    {'name': 'LOCUST_MODE_MASTER', 'value': 'false'},
+                    {'name': 'LOCUST_MODE_WORKER', 'value': 'true'},
+                    {'name': 'LOCUST_MASTER_NODE_HOST', 'value': master_ip}
                 ]
             }]
         },
